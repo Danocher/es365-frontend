@@ -1,24 +1,24 @@
 export default function Home() {
   return (
-    <div className="relative isolate">
+    <div className="relative isolate overflow-hidden">
       {/* Hero section */}
-      <div className="relative px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl py-32 sm:py-48 lg:py-56">
+      <div className="relative isolate px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl py-12 sm:py-24 lg:py-32">
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl md:text-5xl lg:text-6xl">
               ES365 - Умная система учета для вашего бизнеса
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-gray-600 max-w-xl mx-auto">
               Автоматизируйте учет, оптимизируйте процессы и принимайте решения на основе данных
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
               <a
-                href="/register"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                href="/auth"
+                className="w-full sm:w-auto rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Начать бесплатно
               </a>
-              <a href="/demo" className="text-sm font-semibold leading-6 text-gray-900">
+              <a href="/demo" className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600 transition-colors">
                 Демо версия <span aria-hidden="true">→</span>
               </a>
             </div>
@@ -27,26 +27,28 @@ export default function Home() {
       </div>
 
       {/* Feature section */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-600">Быстрый старт</h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <p className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 lg:text-4xl">
             Все что нужно для управления бизнесом
           </p>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 max-w-xl mx-auto">
             ES365 предоставляет полный набор инструментов для эффективного управления вашим бизнесом
           </p>
         </div>
-        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-          <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+        <div className="mx-auto mt-12 sm:mt-16 lg:mt-20">
+          <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8 lg:gap-12">
             {features.map((feature) => (
-              <div key={feature.name} className="flex flex-col">
+              <div key={feature.name} className="relative bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  {feature.icon}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50">
+                    {feature.icon}
+                  </div>
                   {feature.name}
                 </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
-                  <p className="flex-auto">{feature.description}</p>
+                <dd className="mt-4 text-base leading-7 text-gray-600">
+                  {feature.description}
                 </dd>
               </div>
             ))}
@@ -55,23 +57,23 @@ export default function Home() {
       </div>
 
       {/* CTA section */}
-      <div className="relative py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="relative mt-16 sm:mt-24 lg:mt-32 py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 lg:text-4xl">
               Готовы начать?
             </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
+            <p className="mx-auto mt-4 sm:mt-6 max-w-xl text-base sm:text-lg text-gray-600">
               Присоединяйтесь к тысячам компаний, которые уже используют ES365 для управления своим бизнесом
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
               <a
                 href="/register"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="w-full sm:w-auto rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Попробовать бесплатно
               </a>
-              <a href="/contact" className="text-sm font-semibold leading-6 text-gray-900">
+              <a href="/contact" className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600 transition-colors">
                 Связаться с нами <span aria-hidden="true">→</span>
               </a>
             </div>
