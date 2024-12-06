@@ -1,15 +1,36 @@
 'use client'
+import { AuthService } from "@/api/service/auth.service";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useUserStore } from "@/store/user.store";
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function AuthPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const {login, user} = useUserStore()
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        console.log(email, password);
+        AuthService.login(email, password)
+        .then((res)=>{
+            if (res){
+                toast.success(`С возвращением, ${res.user.company}!`);
+                console.log(res, 'res')
+                login(res.user, res.token)
+
+                console.log(user, 'store')
+                console.log(user, 'store')
+                
+                // setTimeout(() => {
+                //     window.location.href = '/bussiness'
+                // }, 2000);
+            }
+        })
+        .catch(e=>{
+            toast.error(e.response.data.message)
+        })
     }
     return (
         <div className="flex items-center justify-center min-h-screen">

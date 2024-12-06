@@ -1,3 +1,5 @@
+import { Toaster } from "sonner";
+
 export default function AuthLayout({
     children,
 }: {
@@ -5,6 +7,7 @@ export default function AuthLayout({
 }) {
     return (
         <div>
+            <Toaster/>
             {children}
         </div>
     )

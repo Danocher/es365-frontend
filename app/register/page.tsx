@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import {  UserService } from "../../api/service/user.service";
 import { RegisterDto } from "../types/user.types";
+import { toast } from "sonner";
 export default function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,8 +17,19 @@ export default function RegisterPage() {
     const [ogrn, setOgrn] = useState('');
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const res  = UserService.createUser({name, email, password, phonenum: Number(phone), company, inn, bik, ogrn});
-        console.log(res);
+        const data = UserService.createUser({name, email, password, phonenum: phone, company, inn, bik, ogrn})
+        .then((res)=>{
+            if (res){
+                toast.success(`Компания ${res.company} успешно зарегистрирована`);
+                setTimeout(() => {
+                    window.location.href = '/auth'
+                }, 2000);
+            }
+        })
+        .catch(e=>{
+            toast.error(e.response.data.message)
+        })
+        
     }
     return (
         <div className="flex items-center justify-center min-h-screen">

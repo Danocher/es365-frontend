@@ -1,3 +1,5 @@
+import { Toaster } from "sonner"
+
 export default function RegisterLayout({
     children,
 }: {
@@ -5,6 +7,7 @@ export default function RegisterLayout({
 }) {
     return (
         <div>
+            <Toaster/>
             {children}
         </div>
     )
