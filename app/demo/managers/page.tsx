@@ -4,49 +4,34 @@ import { useEffect, useState } from 'react';
 import { PlusIcon, Pencil, TrashIcon } from 'lucide-react';
 import { Manager } from '../../../types';
 import { useUserStore } from '@/store/user.store';
-import { ManagerService } from '@/api/service/manager.service';
-import { Imanagers } from '@/app/types/managers.types';
-import Loading from '@/components/loading';
 
 export default function ManagersPage() {
-  // const [managers, setManagers] = useState<Manager[]>([
-  //   {
-  //     id: '1',
-  //     name: 'Иван Петров',
-  //     email: 'ivan@example.com'
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Мария Сидорова',
-  //     email: 'maria@example.com'
-  //   }
-  // ]);
-  const [managers, setManagers] = useState<Imanagers[]>();
-  useEffect(() => {
-    ManagerService.getAllManagers()
-      .then((res) => {
-        if (res) {
-          setManagers(res.data);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+  const [managers, setManagers] = useState<Manager[]>([
+    {
+      id: '1',
+      name: 'Иван Петров',
+      email: 'ivan@example.com'
+    },
+    {
+      id: '2',
+      name: 'Мария Сидорова',
+      email: 'maria@example.com'
+    }
+  ]);
   
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newManager, setNewManager] = useState<Partial<Manager>>({});
 
   const handleAddManager = () => {
-    // if (newManager.name && newManager.email) {
-    //   setManagers([...managers, {
-    //     id: Date.now().toString(),
-    //     name: newManager.name,
-    //     email: newManager.email
-    //   }]);
-    //   setIsAddModalOpen(false);
-    //   setNewManager({});
-    // }
+    if (newManager.name && newManager.email) {
+      setManagers([...managers, {
+        id: Date.now().toString(),
+        name: newManager.name,
+        email: newManager.email
+      }]);
+      setIsAddModalOpen(false);
+      setNewManager({});
+    }
   };
 
   return (
@@ -67,17 +52,14 @@ export default function ManagersPage() {
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            {!managers ? (<Loading/>):(<table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Имя
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Номер телефона 
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Ставка в час
+                      Email
                     </th>
                     <th scope="col" className="relative px-6 py-3">
                       <span className="sr-only">Действия</span>
@@ -85,17 +67,13 @@ export default function ManagersPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-
                   {managers.map((manager) => (
                     <tr key={manager.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {manager.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {manager.phonenum}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {manager.hour_cost}
+                        {manager.email}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button className="text-indigo-600 hover:text-indigo-900 mr-4">
@@ -108,8 +86,8 @@ export default function ManagersPage() {
                     </tr>
                   ))}
                 </tbody>
-              </table>)}
-            </div>{/* Таблица менеджеров */}
+              </table>
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,12 @@
+'use client'
+import { useUserStore } from "@/store/user.store";
+
 export default function Home() {
+  const {isAuth, isLoading} = useUserStore()
+  
   return (
     <div className="relative isolate overflow-hidden">
+      
       {/* Hero section */}
       <div className="relative isolate px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl py-12 sm:py-24 lg:py-32">
@@ -12,12 +18,17 @@ export default function Home() {
               Автоматизируйте учет, оптимизируйте процессы и принимайте решения на основе данных
             </p>
             <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
-              <a
-                href="/auth"
-                className="w-full sm:w-auto rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Начать бесплатно
-              </a>
+              {isAuth ? (
+                <a
+                  href="/bussiness" className="w-full sm:w-auto rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Перейти к предприятию </a>)
+                   :
+                  (<a
+                  href="/auth"
+                  className="w-full sm:w-auto rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Начать бесплатно
+                </a>)}
+              
               <a href="/demo" className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600 transition-colors">
                 Демо версия <span aria-hidden="true">→</span>
               </a>

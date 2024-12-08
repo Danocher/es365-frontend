@@ -8,26 +8,22 @@ import Loading from "@/components/loading"
 export default function BussinessLayout({children,}: {children: React.ReactNode}) {
     const router = useRouter()
     const {user, isLoading} = useUserStore()
-    
-    useEffect(() => {
-        console.log('Layout effect - user:', user, 'isLoading:', isLoading)
-        if (!user && !isLoading) {
-                router.push('/auth')
-        }
-    }, [user, isLoading])
-    
-    if (isLoading) { 
-        return <Loading/>
+    const isAuth  = useUserStore(state => state.isAuth)
+    // if(isLoading) return <Loading/>
+    // else if(!user) router.push('/auth')    
+    // if(isLoading) return <Loading/>
+    if(!isAuth && !isLoading) {
+        router.push('/auth')
     }
-
-    if (!user) {
-        return null
-    }
-
-    return (
-        <div>
-            <Header/>
-            {children}
-        </div>
-    )
+    // if(!user) {
+    //     router.push('/auth')
+    // }
+    else if(!isLoading){
+        
+        return (
+            <div>
+                <Header/>
+                {children}
+            </div>
+        )}
 }

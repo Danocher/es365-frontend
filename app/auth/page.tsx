@@ -25,10 +25,11 @@ export default function AuthPage() {
             if (res) {
                 toast.success(`С возвращением, ${res.user.company}!`)
                 login(res.user, res.token)
+                console.log(res.user, res.token, 'юзер получен')
                 Cookies.set('access_token', res.token)
                 // Даем время для обновления состояния
                 setTimeout(() => {
-                    router.replace('/bussiness')
+                    router.push('/bussiness')
                 }, 1000)
             }
         } catch (e: any) {

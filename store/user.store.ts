@@ -6,8 +6,10 @@ interface UserState {
     user: Iuser | null
     token: string
     isLoading: boolean
+    isAuth: boolean
     login: (user: Iuser | null, token: string) => void
     logout: () => void
+    
 }
 
 interface Iuser {
@@ -26,15 +28,16 @@ export const useUserStore = create<UserState>()(
         (set) => ({
             user: null,
             token: '',
-            isLoading: false,
+            isLoading: true,
+            isAuth: false,
             login: (userData: Iuser | null, tokenAccess: string) => {
-                set({ user: userData, token: tokenAccess, isLoading: false })
+                set({ user: userData, token: tokenAccess, isLoading: false, isAuth: true })
             },
-            logout: () => set({ user: null, token: '', isLoading: false }),
+            logout: () => set({ user: null, token: '', isLoading: false, isAuth: false }),
         }),
         {
             name: 'user-storage',
-            storage: createJSONStorage(() => localStorage),
+            // storage: createJSONStorage(() => localStorage),
         }
     )
 )
