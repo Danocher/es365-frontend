@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlusIcon, Pencil, TrashIcon } from 'lucide-react';
 import { Product } from '../../../types';
+import { useUserStore } from '@/store/user.store';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([
@@ -21,7 +22,7 @@ export default function ProductsPage() {
       description: 'Описание товара 2'
     }
   ]);
-
+  
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newProduct, setNewProduct] = useState<Partial<Product>>({});
 

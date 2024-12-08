@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlusIcon, Pencil, TrashIcon, PlayIcon, StopCircle } from 'lucide-react';
 import { Shift } from '../../../types';
 
 export default function ShiftsPage() {
+  
   const [shifts, setShifts] = useState<Shift[]>([
     {
       id: '1',

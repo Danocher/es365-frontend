@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { Product, Sale } from '../../../types';
+import { useUserStore } from '@/store/user.store';
 
 export default function SalesPage() {
   const [sales, setSales] = useState<Sale[]>([
@@ -18,7 +19,7 @@ export default function SalesPage() {
       shiftId: '1'
     }
   ]);
-
+  
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState<{
     productId: string;

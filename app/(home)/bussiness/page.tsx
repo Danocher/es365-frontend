@@ -1,8 +1,32 @@
+'use client';
 import Image from "next/image";
 import { ArrowUpIcon, DollarSignIcon, ShoppingCartIcon, UserIcon } from 'lucide-react';
-
+import { useEffect, useState } from "react";
+import { StatisticService } from "@/api/service/statistic.service";
+import Loading from "@/components/loading";
+import { useUserStore } from "@/store/user.store";
+// import { useStatisticMonthlySell } from "@/api/hooks/statistic.hooks";
 export default function Home() {
+  
   // Здесь будут данные из API
+  const [totalSales, setTotalSales] = useState(0);
+  const [activeManagers, setActiveManagers] = useState(0);
+  // const [sell, isLoadingSell] = useStatisticMonthlySell()
+  const [isLoadings, setIsLoading] = useState(true);
+  const [isLoadingSell, setIsLoadingSell] = useState(true);
+  useEffect(() => {
+    StatisticService.getMonthlySell()
+    .then((res) => {
+      setTotalSales(res.data.sum)
+      setIsLoadingSell(false)
+    })
+    StatisticService.getActiveManagers()
+    .then((res) => {
+      setActiveManagers(res.data.manager_id)
+      setIsLoading(false)
+    })
+  }, []);
+
   const stats = {
     totalSales: '124,500₽',
     salesGrowth: '+12%',
@@ -32,14 +56,14 @@ export default function Home() {
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Общие продажи</dt>
+                      <dt className="text-sm font-medium text-gray-500 truncate">Общие продажи за месяц</dt>
                       <dd className="flex items-baseline">
-                        <div className="text-2xl font-semibold text-gray-900">{stats.totalSales}</div>
-                        <div className="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+                        <div className="text-2xl font-semibold text-gray-900">{!isLoadingSell ? totalSales : (<Loading />)}</div>
+                        {/* <div className="ml-2 flex items-baseline text-sm font-semibold text-green-600">
                           <ArrowUpIcon className="self-center flex-shrink-0 h-5 w-5 text-green-500" aria-hidden="true" />
                           <span className="sr-only">Increased by</span>
                           {stats.salesGrowth}
-                        </div>
+                        </div> */}
                       </dd>
                     </dl>
                   </div>
@@ -74,7 +98,7 @@ export default function Home() {
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">Активные менеджеры</dt>
-                      <dd className="text-2xl font-semibold text-gray-900">{stats.activeManagers}</dd>
+                      <dd className="text-2xl font-semibold text-gray-900">{isLoadings ? (<Loading />) : activeManagers}</dd>
                     </dl>
                   </div>
                 </div>

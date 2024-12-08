@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlusIcon, Pencil, TrashIcon } from 'lucide-react';
 import { Manager } from '../../../types';
+import { useUserStore } from '@/store/user.store';
 
 export default function ManagersPage() {
   const [managers, setManagers] = useState<Manager[]>([
@@ -17,7 +18,7 @@ export default function ManagersPage() {
       email: 'maria@example.com'
     }
   ]);
-
+  
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newManager, setNewManager] = useState<Partial<Manager>>({});
 
