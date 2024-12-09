@@ -2,72 +2,85 @@
 
 import { useEffect, useState } from 'react';
 import { PlusIcon, Pencil, TrashIcon, PlayIcon, StopCircle } from 'lucide-react';
-import { Shift } from '../../../types';
-
+import { ShiftService } from '@/api/service/shift.service';
+import { IShifts } from '@/app/types/shift.types';
+import { Shift } from '@/app/types';
+import Loading from '@/components/loading';
+import { useRouter } from 'next/navigation';
+import { Imanagers } from '@/app/types/managers.types';
+import { ManagerService } from '@/api/service/manager.service';
+import { toast } from 'sonner';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 export default function ShiftsPage() {
-  
-  const [shifts, setShifts] = useState<Shift[]>([
-    {
-      id: '1',
-      managerId: '1',
-      startTime: '2024-01-20T09:00:00',
-      endTime: '2024-01-20T17:00:00',
-      totalSales: 45300,
-      status: 'closed'
-    },
-    {
-      id: '2',
-      managerId: '2',
-      startTime: '2024-01-21T09:00:00',
-      totalSales: 12500,
-      status: 'active'
-    }
-  ]);
-
-  // Моковые данные менеджеров
-  const managers = [
-    { id: '1', name: 'Иван Петров' },
-    { id: '2', name: 'Мария Сидорова' }
-  ];
-
-  const handleStartShift = (managerId: string) => {
-    const newShift: Shift = {
-      id: Date.now().toString(),
-      managerId,
-      startTime: new Date().toISOString(),
-      totalSales: 0,
-      status: 'active'
-    };
-    setShifts([...shifts, newShift]);
-  };
-
-  const handleEndShift = (shiftId: string) => {
-    setShifts(shifts.map(shift => 
-      shift.id === shiftId 
-        ? { ...shift, endTime: new Date().toISOString(), status: 'closed' as const }
-        : shift
-    ));
-  };
-
+  const router = useRouter();
+  const [managerId, setManagerId] = useState<string>('');
+  function handleOpenShift() {
+    ShiftService.openShift(managerId)
+        .then((res) => {
+          if (res) {
+            localStorage.setItem('shift', JSON.stringify(res.fullShift));
+            console.log(res);
+            toast.success(res.shift);
+          }
+        })
+        .catch((e) => {
+          toast.error(e);
+        });
+  }
+  const [shift, setShift] = useState<IShifts[]>();
+  const [managers, setManagers] = useState<Imanagers[]>();
+  useEffect(() => {
+    ShiftService.getShifts()
+      .then((res) => {
+        if (res) {
+          setShift(res.data);
+        }
+      })
+      .catch((e) => {
+        toast.error(e);
+      });
+    ManagerService.getAllManagers() 
+      .then((res) => {
+        if (res) {
+          setManagers(res.data);
+        }
+      })
+      .catch((e) => {
+        toast.error(e);});
+  }, []);
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-900">Управление сменами</h1>
         <div className="flex gap-2">
-          <select
-            className="block w-64 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            onChange={(e) => handleStartShift(e.target.value)}
-            defaultValue=""
-          >
-            <option value="" disabled>Выберите менеджера для новой смены</option>
-            {managers.map((manager) => (
-              <option key={manager.id} value={manager.id}>
-                {manager.name}
-              </option>
-            ))}
-          </select>
+            <Select  onValueChange={(e)=>setManagerId(e)} defaultValue=''
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Выбрать менеджера" />
+              </SelectTrigger>
+              <SelectContent >
+                <SelectGroup >
+                  <SelectLabel>Менеджер</SelectLabel>
+                  {!managers ? (<Loading/>) : managers.map((manager) => (
+                    <SelectItem key={manager.id} value={manager.id}>
+                      {manager.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+        </Select>
+          
           <button
             className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+            onClick={handleOpenShift}
           >
             <PlusIcon className="-ml-1 mr-2 h-5 w-5" />
             Начать смену
@@ -81,7 +94,7 @@ export default function ShiftsPage() {
           <h2 className="text-lg font-medium text-gray-900">Активные смены</h2>
         </div>
         <div className="border-t border-gray-200">
-          <div className="divide-y divide-gray-200">
+          {/* <div className="divide-y divide-gray-200">
             {shifts.filter(shift => shift.status === 'active').map((shift) => (
               <div key={shift.id} className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
@@ -106,7 +119,7 @@ export default function ShiftsPage() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -136,31 +149,31 @@ export default function ShiftsPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {shifts.map((shift) => (
-                    <tr key={shift.id}>
+                  {!shift ?(<Loading/>) : (shift.map((shift) => (
+                    <tr key={shift.id} onClick={() => router.push(`/bussiness/shifts/${shift.id}`)}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {managers.find(m => m.id === shift.managerId)?.name}
+                        {shift.manager.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(shift.startTime).toLocaleString()}
+                        {new Date(shift.date_start).toLocaleString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {shift.endTime ? new Date(shift.endTime).toLocaleString() : '-'}
+                        {shift.date_end ? new Date(shift.date_end).toLocaleString() : 'Не окончена'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {shift.totalSales}₽
+                      {shift.order.reduce((acc, order) => acc + order.sum, 0)} ₽
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          shift.status === 'active' 
+                          shift.date_end  
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-gray-100 text-gray-800'
                         }`}>
-                          {shift.status === 'active' ? 'Активна' : 'Закрыта'}
+                          {!shift.date_end  ? 'Активна' : 'Закрыта'}
                         </span>
                       </td>
                     </tr>
-                  ))}
+                  )))}
                 </tbody>
               </table>
             </div>
