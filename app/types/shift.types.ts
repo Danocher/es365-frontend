@@ -42,3 +42,20 @@ export interface IShift {
         user_id: string;
         }
     }
+export interface IOpenedShift{
+    id: string;
+    date_start: Date;
+    date_end: Date | null;
+    manager_id: string;
+    user_id: string;
+}
+export interface shiftClose{
+    shift:{
+        date_start: Date;
+        date_end: Date;
+        manager: {
+            name: string;
+        };
+    }
+    time:string
+}

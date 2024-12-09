@@ -1,4 +1,4 @@
-import { IShift, IShifts } from "@/app/types/shift.types"
+import { IShift, IShifts, shiftClose } from "@/app/types/shift.types"
 import { axiosWithAuth } from "../api.config"
 
 export const ShiftService  = {
@@ -15,4 +15,8 @@ export const ShiftService  = {
         const response =  await axiosWithAuth.post<IShift>('/shift/open', {manager: managerId})
         return response.data 
     },
+    async closeShift(){
+        const response = await axiosWithAuth.post<shiftClose>('/shift/close')
+        return response.data
+    }
 }
