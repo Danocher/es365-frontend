@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { PlusIcon, Pencil, TrashIcon } from 'lucide-react';
-import { Manager } from '../../../types';
+// import { Manager } from '../../../types';
 import { useUserStore } from '@/store/user.store';
-
+interface Manager {
+  id: string;
+  name: string;
+  email: string;
+}
 export default function ManagersPage() {
   const [managers, setManagers] = useState<Manager[]>([
     {
