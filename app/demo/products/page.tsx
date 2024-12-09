@@ -2,9 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { PlusIcon, Pencil, TrashIcon } from 'lucide-react';
-import { Product } from '../../../types';
+// import { Product } from '../../../types';
 import { useUserStore } from '@/store/user.store';
-
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  description?: string;
+}
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([
     {

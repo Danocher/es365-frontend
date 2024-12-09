@@ -2,7 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { PlusIcon, Pencil, TrashIcon, PlayIcon, StopCircle } from 'lucide-react';
-import { Shift } from '../../../types';
+// import { Shift } from '../../../types';
+interface Shift {
+  id: string;
+  managerId: string;
+  startTime: string;
+  endTime?: string;
+  totalSales: number;
+  status: 'active' | 'closed';
+}
 
 export default function ShiftsPage() {
   

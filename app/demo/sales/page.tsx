@@ -2,8 +2,26 @@
 
 import { useEffect, useState } from 'react';
 import { PlusIcon } from 'lucide-react';
-import { Product, Sale } from '../../../types';
+// import { Product, Sale } from '../../../types';
 import { useUserStore } from '@/store/user.store';
+interface Sale {
+  id: string;
+  products: {
+    productId: string;
+    quantity: number;
+    priceAtSale: number;
+  }[];
+  totalAmount: number;
+  managerId: string;
+  createdAt: string;
+  shiftId: string;
+}
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
 
 export default function SalesPage() {
   const [sales, setSales] = useState<Sale[]>([
