@@ -6,5 +6,8 @@ export const StatisticService  = {
     },
     getActiveManagers() {
         return axiosWithAuth.get<{manager_id:number}>('/statistic/active-managers')
+    },
+    getProductCount() {
+        return axiosWithAuth.get<{id:number}>('/statistic/product-count')
     }
 }

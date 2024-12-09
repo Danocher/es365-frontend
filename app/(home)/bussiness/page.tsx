@@ -11,9 +11,11 @@ export default function Home() {
   // Здесь будут данные из API
   const [totalSales, setTotalSales] = useState(0);
   const [activeManagers, setActiveManagers] = useState(0);
+  const [productCount, setProductCount] = useState(0);
   // const [sell, isLoadingSell] = useStatisticMonthlySell()
   const [isLoadings, setIsLoading] = useState(true);
   const [isLoadingSell, setIsLoadingSell] = useState(true);
+  const [isLoadingsProduct, setIsLoadingProduct] = useState(true);
   useEffect(() => {
     StatisticService.getMonthlySell()
     .then((res) => {
@@ -24,6 +26,12 @@ export default function Home() {
     .then((res) => {
       setActiveManagers(res.data.manager_id)
       setIsLoading(false)
+    })
+    StatisticService.getProductCount()
+    .then((res) => {
+      console.log(res.data)
+      setProductCount(res.data.id)
+      setIsLoadingProduct(false)
     })
   }, []);
 
@@ -40,7 +48,7 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="grid grid-rows-[20px_1fr_20px]  min-h-screen p-8 pb-20  sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         
         <div className="space-y-6">
@@ -81,7 +89,7 @@ export default function Home() {
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">Товаров в наличии</dt>
-                      <dd className="text-2xl font-semibold text-gray-900">{stats.totalProducts}</dd>
+                      <dd className="text-2xl font-semibold text-gray-900">{!isLoadingsProduct ? productCount : (<Loading />)}</dd>
                     </dl>
                   </div>
                 </div>
