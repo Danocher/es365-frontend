@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { PlusIcon, Pencil, TrashIcon, PlayIcon, StopCircle } from 'lucide-react';
+import { PlusIcon, Pencil, TrashIcon, PlayIcon, StopCircle, MessageCircleQuestion } from 'lucide-react';
 import { ShiftService } from '@/api/service/shift.service';
 import { IOpenedShift, IShifts } from '@/app/types/shift.types';
 import { Shift } from '@/app/types';
@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Button } from '@/components/ui/button';
 
 export default function ShiftsPage() {
   const router = useRouter();
@@ -29,7 +30,6 @@ export default function ShiftsPage() {
         .then((res) => {
           if (res) {
             localStorage.setItem('shift', JSON.stringify(res.fullShift));
-            console.log(res);
             toast.success(res.shift);
             setTimeout(()=>{
               window.location.reload()
@@ -45,6 +45,7 @@ export default function ShiftsPage() {
     ShiftService.closeShift()
     .then((res)=>{
       localStorage.removeItem('shift')
+      
       toast.success(`Смена ${res.shift.manager.name} закрыта. Смена составила ${res.time}`)
       setTimeout(()=>{
         window.location.reload()
@@ -55,7 +56,24 @@ export default function ShiftsPage() {
     })
 
     }
-  
+  function handleFindShift(){
+    console.log(managerId)
+    ShiftService.getShiftByManagerId(managerId)
+      .then((res) => {
+        if (res) {
+          localStorage.setItem('shift', JSON.stringify(res.data.fullShift[0]));
+          setActiveShift(res.data.fullShift[0]);
+          toast.success(res.data.shift);
+          setTimeout(()=>{
+            window.location.reload()
+          }, 1500)
+        }
+      })
+      .catch((e) => {
+        console.log(e.response.data.error)
+        toast.error(e.response.data.error);
+      });
+  }
   const [shift, setShift] = useState<IShifts[]>();
   const [managers, setManagers] = useState<Imanagers[]>();
   useEffect(() => {
@@ -87,7 +105,10 @@ export default function ShiftsPage() {
       <Toaster/>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-900">Управление сменами</h1>
+            
+          {!activeShift && (
         <div className="flex gap-2">
+
             <Select  onValueChange={(e)=>setManagerId(e)} defaultValue=''
             >
               <SelectTrigger className="w-[180px]">
@@ -104,15 +125,22 @@ export default function ShiftsPage() {
                 </SelectGroup>
               </SelectContent>
         </Select>
-          
-          <button
+            <button
             className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
             onClick={handleOpenShift}
           >
             <PlusIcon className="-ml-1 mr-2 h-5 w-5" />
             Начать смену
           </button>
-        </div>
+        <Button onClick={handleFindShift}>
+        <MessageCircleQuestion className="-ml-1 mr-2 h-5 w-5" />
+        Уже есть открытая смена
+      </Button>
+      </div>
+        )}
+          
+          
+        
       </div>
 
       {/* Активные смены */}

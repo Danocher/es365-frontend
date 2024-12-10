@@ -1,4 +1,4 @@
-import { IShift, IShifts, shiftClose } from "@/app/types/shift.types"
+import { IFindShift, IShift, IShifts, shiftClose } from "@/app/types/shift.types"
 import { axiosWithAuth } from "../api.config"
 
 export const ShiftService  = {
@@ -18,5 +18,9 @@ export const ShiftService  = {
     async closeShift(){
         const response = await axiosWithAuth.post<shiftClose>('/shift/close')
         return response.data
-    }
+    },
+    getShiftByManagerId(managerId: string) {
+        const response = axiosWithAuth.get<IFindShift>(`/shift/shift-by-manager?manager_id=${managerId}`)
+        return response
+    },
 }

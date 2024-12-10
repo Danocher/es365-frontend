@@ -42,6 +42,16 @@ export interface IShift {
         user_id: string;
         }
     }
+export interface IFindShift {
+    shift:string,
+    fullShift:{
+        id: string;
+        date_start: Date;
+        date_end: Date | null;
+        manager_id: string;
+        user_id: string;
+        }[]
+    }
 export interface IOpenedShift{
     id: string;
     date_start: Date;

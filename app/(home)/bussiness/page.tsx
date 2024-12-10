@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { StatisticService } from "@/api/service/statistic.service";
 import Loading from "@/components/loading";
 import { useUserStore } from "@/store/user.store";
+import { IOpenedShift } from "@/app/types/shift.types";
+import { ManagerService } from "@/api/service/manager.service";
+import { Imanagers } from "@/app/types/managers.types";
+import { toast } from "sonner";
 // import { useStatisticMonthlySell } from "@/api/hooks/statistic.hooks";
 export default function Home() {
   
@@ -16,7 +20,17 @@ export default function Home() {
   const [isLoadings, setIsLoading] = useState(true);
   const [isLoadingSell, setIsLoadingSell] = useState(true);
   const [isLoadingsProduct, setIsLoadingProduct] = useState(true);
+  const [activeShift, setActiveShift] = useState<IOpenedShift>();
+  const [managers, setManagers] = useState<Imanagers[]>();
   useEffect(() => {
+    ManagerService.getAllManagers() 
+      .then((res) => {
+        if (res) {
+          setManagers(res.data);
+        }
+      })
+      .catch((e) => {
+        toast.error(e);});
     StatisticService.getMonthlySell()
     .then((res) => {
       setTotalSales(res.data.sum)
@@ -33,6 +47,10 @@ export default function Home() {
       setProductCount(res.data.id)
       setIsLoadingProduct(false)
     })
+    const shift = localStorage.getItem('shift')
+    if (shift) {
+      setActiveShift(JSON.parse(shift))
+    }
   }, []);
 
   const stats = {
@@ -118,20 +136,22 @@ export default function Home() {
               <div className="p-5">
                 <div className="flex flex-col">
                   <h3 className="text-sm font-medium text-gray-500">Текущая смена</h3>
-                  <dl className="mt-2 space-y-1">
+                  {activeShift ? ( <dl className="mt-2 space-y-1">
                     <div className="text-sm text-gray-900">
                       <dt className="inline">Менеджер: </dt>
-                      <dd className="inline font-medium">{stats.currentShift.manager}</dd>
+                      <dd className="inline font-medium">{managers?.find(manager => manager.id === activeShift.manager_id)?.name}</dd>
                     </div>
                     <div className="text-sm text-gray-900">
                       <dt className="inline">Начало: </dt>
-                      <dd className="inline font-medium">{stats.currentShift.startTime}</dd>
+                      <dd className="inline font-medium">{new Date(activeShift.date_start).toLocaleString()}</dd>
                     </div>
-                    <div className="text-sm text-gray-900">
+                    {/* <div className="text-sm text-gray-900">
                       <dt className="inline">Продажи: </dt>
                       <dd className="inline font-medium">{stats.currentShift.sales}</dd>
-                    </div>
-                  </dl>
+                    </div> */}
+                  </dl>):(<div>Смена не открыта</div>) }
+
+                 
                 </div>
               </div>
             </div>
