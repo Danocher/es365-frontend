@@ -71,7 +71,7 @@ export default function ShiftsPage() {
       })
       .catch((e) => {
         console.log(e.response.data.error)
-        toast.error(e.response.data.error);
+        toast.error(e.response.data.message);
       });
   }
   const [shift, setShift] = useState<IShifts[]>();

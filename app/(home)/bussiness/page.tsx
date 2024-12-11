@@ -1,6 +1,6 @@
 'use client';
 import Image from "next/image";
-import { ArrowUpIcon, DollarSignIcon, ShoppingCartIcon, UserIcon } from 'lucide-react';
+import { ArrowUpIcon, DollarSignIcon, ShoppingCartIcon, UserIcon, ReceiptRussianRubleIcon } from 'lucide-react';
 import { useEffect, useState } from "react";
 import { StatisticService } from "@/api/service/statistic.service";
 import Loading from "@/components/loading";
@@ -9,6 +9,7 @@ import { IOpenedShift } from "@/app/types/shift.types";
 import { ManagerService } from "@/api/service/manager.service";
 import { Imanagers } from "@/app/types/managers.types";
 import { toast } from "sonner";
+import Chart from "./_components/chart";
 // import { useStatisticMonthlySell } from "@/api/hooks/statistic.hooks";
 export default function Home() {
   
@@ -53,17 +54,17 @@ export default function Home() {
     }
   }, []);
 
-  const stats = {
-    totalSales: '124,500₽',
-    salesGrowth: '+12%',
-    totalProducts: '45',
-    activeManagers: '3',
-    currentShift: {
-      manager: 'Иван Петров',
-      startTime: '09:00',
-      sales: '45,300₽'
-    }
-  };
+  // const stats = {
+  //   totalSales: '124,500₽',
+  //   salesGrowth: '+12%',
+  //   totalProducts: '45',
+  //   activeManagers: '3',
+  //   currentShift: {
+  //     manager: 'Иван Петров',
+  //     startTime: '09:00',
+  //     sales: '45,300₽'
+  //   }
+  // };
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px]  min-h-screen p-8 pb-20  sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -78,13 +79,13 @@ export default function Home() {
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <DollarSignIcon className="h-6 w-6 text-gray-400" />
+                    <ReceiptRussianRubleIcon className="h-6 w-6 text-gray-400" />
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
                       <dt className="text-sm font-medium text-gray-500 truncate">Общие продажи за месяц</dt>
                       <dd className="flex items-baseline">
-                        <div className="text-2xl font-semibold text-gray-900">{!isLoadingSell ? totalSales : (<Loading />)}</div>
+                        <div className="text-2xl font-semibold text-gray-900">{!isLoadingSell ? totalSales.toLocaleString("de-DE") : (<Loading />)}</div>
                         {/* <div className="ml-2 flex items-baseline text-sm font-semibold text-green-600">
                           <ArrowUpIcon className="self-center flex-shrink-0 h-5 w-5 text-green-500" aria-hidden="true" />
                           <span className="sr-only">Increased by</span>
@@ -156,6 +157,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <Chart/>
         </div>
       </main>
     </div>

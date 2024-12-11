@@ -9,5 +9,8 @@ export const StatisticService  = {
     },
     getProductCount() {
         return axiosWithAuth.get<{id:number}>('/statistic/product-count')
+    },
+    getMonthlyTopManager() {
+        return axiosWithAuth.get<{name:string, sell:number}[]>('/statistic/monthly-manager-sell')
     }
 }
