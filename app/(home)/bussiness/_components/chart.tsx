@@ -30,6 +30,10 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function Chart() {
+  const months = [
+    "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+];
     const [monthly, setMonthly] = useState<{name:string, sell:number}[]>()
     const matches = useMediaQuery('(min-width: 820px)')
     const [isLoading, setIsLoading] = useState(true)
@@ -50,9 +54,9 @@ export default function Chart() {
     }})
     }, [])
   return (
-    <Card className='w-1/2'>
+    <Card className='w-full h-[400px] sm:h-[400px] lg:h-[500px]'>
       <CardHeader>
-        <CardTitle>Продажи Менеджеров</CardTitle>
+        <CardTitle>Продажи Менеджеров За {months[new Date().getMonth()]} </CardTitle>
         <CardDescription>От {new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleDateString()} - {new Date().toLocaleDateString()}</CardDescription>
       </CardHeader>
       <CardContent>

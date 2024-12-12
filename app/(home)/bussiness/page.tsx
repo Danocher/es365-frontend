@@ -10,6 +10,8 @@ import { ManagerService } from "@/api/service/manager.service";
 import { Imanagers } from "@/app/types/managers.types";
 import { toast } from "sonner";
 import Chart from "./_components/chart";
+import Chart1 from "./_components/chart1";
+import Chart2 from "./_components/chart2";
 // import { useStatisticMonthlySell } from "@/api/hooks/statistic.hooks";
 export default function Home() {
   
@@ -67,13 +69,13 @@ export default function Home() {
   // };
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px]  min-h-screen p-8 pb-20  sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <div className="grid grid-rows-[20px_1fr_20px] min-h-screen p-4 pb-20 sm:p-8 lg:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-4 sm:gap-8 row-start-2 items-center sm:items-start">
         
-        <div className="space-y-6">
-          <h1 className="text-2xl font-semibold text-gray-900">Панель управления</h1>
+        <div className="space-y-4 sm:space-y-6 w-full">
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Панель управления</h1>
           
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Общие продажи */}
             <div className="bg-white overflow-hidden shadow rounded-lg">
               <div className="p-5">
@@ -157,7 +159,16 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <Chart/>
+          <div className="flex flex-col lg:flex-row justify-center items-center gap-4 lg:space-x-4">
+            <div className="w-full lg:w-1/2">
+              <Chart/>
+            </div>
+            <div className="w-full lg:w-1/2">
+              <Chart1/>
+            </div>
+          </div>
+          <Chart2/> 
+
         </div>
       </main>
     </div>
