@@ -3,9 +3,27 @@
 import { useEffect, useState } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { Product, Sale } from '../../../types';
-import { useUserStore } from '@/store/user.store';
+import { OrderService } from '@/api/service/order.service';
+import { IOrders } from '@/app/types/orders.types';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import Loading from '@/components/loading';
+import CreateOrder from './_components/create-order';
 
 export default function SalesPage() {
+  const [orders, setOrders] = useState<IOrders[]>();
+  useEffect(() => {
+   OrderService.getAllOrders()
+   .then((res) => {
+    if(res){
+      setOrders(res.data)
+    }
+   })
+   .catch((e) => {
+     toast.error(e.response.data.message);
+   })
+  }, []);
+
   const [sales, setSales] = useState<Sale[]>([
     {
       id: '1',
@@ -59,18 +77,12 @@ export default function SalesPage() {
       setSelectedProducts([]);
     }
   };
-
+  const router = useRouter();
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-900">Продажи</h1>
-        <button
-          onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-        >
-          <PlusIcon className="-ml-1 mr-2 h-5 w-5" />
-          Новая продажа
-        </button>
+        <CreateOrder/> 
       </div>
 
       {/* Таблица продаж */}
@@ -96,31 +108,30 @@ export default function SalesPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {sales.map((sale) => (
-                    <tr key={sale.id}>
+                  {!orders ? (<Loading/>) : (orders.map((sale) => (
+                    <tr key={sale.id} onClick={() =>router.push(`/bussiness/orders/${sale.id}`)}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(sale.createdAt).toLocaleString()}
+                        {new Date(sale.date).toLocaleString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {managers.find(m => m.id === sale.managerId)?.name}
+                        {sale.manager.name}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
                         <ul>
                           {sale.products.map((item, index) => {
-                            const product = products.find(p => p.id === item.productId);
                             return (
                               <li key={index}>
-                                {product?.name} x {item.quantity} = {item.priceAtSale * item.quantity}₽
+                                {item.name} - {item.sell}
                               </li>
                             );
                           })}
                         </ul>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {sale.totalAmount}₽
+                        {sale.sum}₽
                       </td>
                     </tr>
-                  ))}
+                  )))}
                 </tbody>
               </table>
             </div>

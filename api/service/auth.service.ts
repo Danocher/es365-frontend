@@ -11,7 +11,7 @@ export const AuthService = {
 
     async getNewTokens() {
         const response = await axiosClassic.get<{token:string}>('/auth/refresh')
-        Cookies.set('access_token', response.data.token, {expires: 1})
+        Cookies.set('access_token', response.data.token, )
         return response.data
     }
 }
